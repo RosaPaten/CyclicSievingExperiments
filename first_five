@@ -1,0 +1,9 @@
+Sym = SymmetricFunctions(QQ)
+H = Sym.homogeneous()
+R=PolynomialRing(QQ, 3,'x')
+x=R.gens()
+s = Sym.s()
+
+f = s([3,1,1]).expand(3) + s([4,2]).expand(3) +s([4,1,1]).expand(3) + s([6,1]).expand(3) +s([5,1,1]).expand(3) +s([4,3]).expand(3) +s([7,1]).expand(3) + s([6,2]).expand(3) + s([8,1]).expand(3)+s([10]).expand(3)
+
+print(f)
