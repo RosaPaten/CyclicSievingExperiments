@@ -26,7 +26,7 @@ def dinv(b):
   pass
 
 #returns a polynomial in q, t
-def A(q,t):
+def A():
   f = 0
   for b in P:
     f = f + i(b)*dinv(b)
