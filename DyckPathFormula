@@ -26,10 +26,10 @@ def dinv(b):
   pass
 
 #returns a polynomial in q, t
-def A_n(q,t):
-  A = 0
+def A(q,t):
+  f = 0
   for b in P:
-    A = A + i(b)*dinv(b)
-  return A
+    f = f + i(b)*dinv(b)
+  return f
     
   
