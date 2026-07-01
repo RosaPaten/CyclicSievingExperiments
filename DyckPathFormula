@@ -4,7 +4,7 @@ P = posets.TamariLattice(n)
 R.<q,t> = PolynomialRing(ZZ)
 G = P.hasse_diagram()
 
-
+#computes distance between Dyck paths a, b in Tamari poset
 def d(a,b):
   all_paths = G.all_paths(a, b)
   if all_paths == []:
@@ -51,5 +51,8 @@ def A():
   for b in P:
     f = f + i(b)*dinv(b)
   return f
+
+f = A()
+print(f(q,1/q))
     
   
