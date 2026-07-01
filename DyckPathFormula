@@ -1,0 +1,29 @@
+####code to compute A_n(q,r,1)
+n = 3
+P = posets.TamariLattice(n)
+R.<q> = PolynomialRing(ZZ)
+G = P.hasse_diagram()
+
+
+def d(a,b):
+  all_paths = G.all_paths(a, b)
+  if all_paths == []:
+    return -1
+  else:
+    return len(max(all_paths, key=len))-1
+
+
+def i(b):
+  f = 0
+  for a in P:
+    if d(a,b)!=-1:
+      f = f + q^(d(a,b))
+  return f
+      
+
+
+def dinv(b):
+  pass
+
+def A_n(q,r):
+  
