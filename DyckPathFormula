@@ -1,24 +1,35 @@
 ####code to compute A_n(q,r,1)
-n = 3
+n = 9
 P = posets.TamariLattice(n)
 R.<q,t> = PolynomialRing(ZZ)
 G = P.hasse_diagram()
+#zeta_3 = e^((2*pi*i)/3)
 
-#computes distance between Dyck paths a, b in Tamari poset
-def d(a,b):
-  all_paths = G.all_paths(a, b)
-  if all_paths == []:
-    return -1
-  else:
-    return len(max(all_paths, key=len))-1
+#couldn't find this in sage for some reason, but dp to compute longest chain from v to all other vertices in graph reachable from v
+#exploits fact that poset is a DAG
+def longest_chain_lengths(G, v):
+    top_order = G.topological_sort()
+    distances = {v: 0}
+    for v in top_order:
+        if v not in distances:
+            continue
+        for w in G.neighbor_out_iterator(v):
+            if w in distances:
+                distances[w] = max(distances.get(w), distances[v] + 1)
+            else:
+                distances[w] = distances[v] + 1
+    return distances
 
-#returns a polynomial in q
+
+
 def i(b):
+  H = G.reverse()
+  distances = longest_chain_lengths(H,b)
   f = 0
-  for a in P:
-    if d(a,b)!=-1:
-      f = f + q^(d(a,b))
+  for key in distances:
+      f = f+q^(distances[key])
   return f
+
       
 #converts a Dyck word to a Dyck path
 def path(b):
@@ -39,11 +50,7 @@ def dinv(b):
     for i in range(0,j):
       if c[i] - c[j] == 0 or c[i] - c[j] == 1:
         count = count+1
-  return t^count 
-      
-
-  
-  
+  return t^count   
 
 #returns a polynomial in q, t
 def A():
@@ -54,5 +61,6 @@ def A():
 
 f = A()
 print(f(q,1/q))
+#f(zeta_3,zeta_3^2).simplify_full()
     
   
