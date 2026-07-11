@@ -30,33 +30,19 @@ def i(b):
       f = f+q^(distances[key])
   return f
 
-      
-#converts a Dyck word to a Dyck path
-def path(b):
-  temp = DyckWord(list(b[0:-1])).to_non_decreasing_parking_function()
-  path = []
-  for i in temp:
-    path.append(i-1)
-  return path
 
 #returns a polynomial in t
 def dinv(b):
-  c = []
-  path_b = path(b)
-  for i in range(len(path_b)):
-    c.append(i-path_b[i])
-  count = 0
-  for j in range(0,n):
-    for i in range(0,j):
-      if c[i] - c[j] == 0 or c[i] - c[j] == 1:
-        count = count+1
-  return t^count   
+  return t^DyckWord(list(b)[0:-1]).dinv() 
+
+def bounce(b):
+    return DyckWord(list(b[0:-1])).bounce()
 
 #returns a polynomial in q, t
 def A():
   f = 0
   for b in P:
-    f = f + i(b)*dinv(b)
+    f = f + i(b)*bounce(b)
   return f
 
 f = A()
