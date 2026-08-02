@@ -1,0 +1,16 @@
+from sage.combinat.crystals.kirillov_reshetikhin import partitions_in_box
+
+R.<t> = PolynomialRing(ZZ)
+def f(r,k):
+    S = PartitionsInBox(k-1,r)
+    poly = 0
+    for p in S:
+        q = set()
+        for x in p:
+            if x!=r:
+                q.add(x)
+        R = len(q) + 1
+        poly = poly + R*t^(p.size())
+    return poly
+
+f(4,4)
