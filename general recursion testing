@@ -41,12 +41,41 @@ def f(n,alpha):
       poly = poly + d(P)*dinv(P)
   return poly
 
+def is_valid(alpha,beta,lambda):
+  pass
+
+def sum(x):
+  tot = 0
+  for i in x:
+    tot = tot + i
+  return tot
+
+#returns polynomial in Z[t]
+def g(alpha,beta):
+  partitions = PartitionsInBox(len(alpha)-1,len(beta))
+  poly = 0
+  for lam in partitionsL:
+    if is_valid(alpha,beta,lam) == True:
+      poly = poly + t^sum(lam)
+  return poly
+
+def all_comp(n):
+  
+
+def tester(n,alpha):
+  k_a = sum(alpha)
+  k_b = len(alpha)
+  poly = 0
+  for beta in 
+
 
 N = 3
 comp = list(Compositions(N))
 
 for c in comp:
   print(f(4,c))
+
+def tester
 
 
       
