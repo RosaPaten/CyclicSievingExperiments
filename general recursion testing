@@ -1,0 +1,55 @@
+R.<q,t> = PolynomialRing(ZZ)
+
+#dinv of the upper dyck path
+def dinv(P):
+  return t^(P.upper_dyck_word()).dinv()
+
+#distance
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+def z(P):
+    a = P.lower_dyck_word()
+    b = P.upper_dyck_word()
+    area_a = a.to_area_sequence()
+    area_b = b.to_area_sequence()
+    index_1 = 0
+    index_2 = 0
+    z_vec = []
+    for i in area_b[1:]:
+        index_2 = index_2+1
+        if i == 0:
+            num_z = 0
+            for j in range(index_1,index_2):
+                if area_a[j] == 0:
+                    num_z = num_z+1
+            z_vec.append(num_z)
+            index_1 = index_2
+    last = 0
+    num_z = 0
+    for j in range(index_1,len(area_a)):
+        if area_a[j]==0:
+            num_z = num_z + 1
+    z_vec.append(num_z)
+    return z_vec
+
+def f(n,alpha):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if z(P) == alpha:
+      poly = poly + d(P)*dinv(P)
+  return poly
+
+
+N = 3
+comp = list(Compositions(N))
+
+for c in comp:
+  print(f(4,c))
+
+
+      
+  
+  
+  
