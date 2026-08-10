@@ -60,13 +60,20 @@ def g(alpha,beta):
   return poly
 
 def all_comp(n):
-  
+  all = []
+  for i in range(1,n+1):
+    comp = list(Compositions(N))
+    all = all + comp
+  return all
 
 def tester(n,alpha):
   k_a = sum(alpha)
   k_b = len(alpha)
   poly = 0
-  for beta in 
+  all = all_comp(n-k_b)
+  for beta in all:
+    poly = poly + g(alpha,beta)*f(n,beta)
+  return t^(binomial(k_b,2))*q^(k_a-k_b)*poly
 
 
 N = 3
