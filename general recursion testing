@@ -41,9 +41,21 @@ def f(n,alpha):
       poly = poly + d(P)*dinv(P)
   return poly
 
-def is_valid(alpha,beta,lambda):
-  pass
+def sum_between(i1,i2,alpha):
+  tot = 0
+  for j in range(i1,i2+1):
+    tot = tot + alpha[j]
+  return tot
 
+def is_valid(alpha,beta,lambda):
+  reversed = lambda[::-1]
+  for i in range(len(alpha)):
+    i1 = reversed[i]
+    i2 = reversed[i+1]
+    if alpha[i]>1+sum_between(i1,i2,beta):
+      return False
+  return True
+      
 def sum(x):
   tot = 0
   for i in x:
