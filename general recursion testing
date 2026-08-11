@@ -47,16 +47,22 @@ def sum_between(i1,i2,alpha):
     tot = tot + alpha[j]
   return tot
 
-def is_valid(alpha,beta,lambda):
-  reversed = lambda[::-1]
-  if alpha[0]>1+sum_between(0,reversed[0]):
+def is_valid(alpha,beta,lam):
+  reversed = lam[::-1]
+  zeros = []
+  for i in range(len(alpha) - len(lam)-1):
+      zeros.append(0)  
+  reversed = zeros + reversed
+  print(reversed)
+  if alpha[0]>1+sum_between(0,reversed[0],beta):
+    #print(sum_between(0,1,beta))
     return False
-  for i in range(1,len(alpha)):
-    i1 = reversed[i-1]+1
+  for i in range(1,len(reversed)):
+    i1 = reversed[i-1]
     i2 = reversed[i]
-    if alpha[i]>1+sum_between(i1,i2,beta):
+    if alpha[i]>1+sum_between(i1+1,i2,beta):
       return False
-  if alpha[-1]>1+sum_between(reversed[-1]+1,len(beta)):
+  if alpha[-1]>1+sum_between(reversed[-1],len(beta),beta):
     return False
   return True
       
@@ -69,8 +75,10 @@ def sum(x):
 #returns polynomial in Z[t]
 def g(alpha,beta):
   partitions = PartitionsInBox(len(alpha)-1,len(beta))
+  print(partitions)
   poly = 0
-  for lam in partitionsL:
+  for lam in partitions:
+    print(lam)
     if is_valid(alpha,beta,lam) == True:
       poly = poly + t^sum(lam)
   return poly
@@ -78,27 +86,33 @@ def g(alpha,beta):
 def all_comp(n):
   all = []
   for i in range(1,n+1):
-    comp = list(Compositions(N))
+    comp = list(Compositions(i))
     all = all + comp
   return all
 
 def tester(n,alpha):
   k_a = sum(alpha)
   k_b = len(alpha)
+  print(n-k_b)
   poly = 0
   all = all_comp(n-k_b)
+  print(all)
   for beta in all:
-    poly = poly + g(alpha,beta)*f(n,beta)
+    poly = poly + g(alpha,beta)*f(n-k_b,beta)
   return t^(binomial(k_b,2))*q^(k_a-k_b)*poly
 
 
 N = 3
 comp = list(Compositions(N))
+#c = comp[0]
+n = 4
+#print(c)
 
 for c in comp:
-  print(f(4,c))
-
-def tester
+    print(c)
+    print(tester(n,c))
+    print(f(n,c))
+ 
 
 
       
