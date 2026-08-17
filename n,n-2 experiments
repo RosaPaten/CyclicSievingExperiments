@@ -1,3 +1,4 @@
+R.<t> = PolynomialRing(ZZ)
 def num_rect_parts(lam):
   return len(set(lam))
 
@@ -7,8 +8,14 @@ def R(lam1,lam2):
   for j in lam1:
     if j<len(lam2):
       mu.append(lam2[j])
-  return 1 + num_rect_parts(lam)
+  return 1 + num_rect_parts(mu)
 
 
 def f(k,r,s):
-  
+  S = PartitionsInBox(k-1,r)
+  T = PartitionsInBox(r-1,s)
+  poly = 0
+  for lam1 in S:
+    for lam2 in T:
+      poly = poly + R(lam1,lam2) + t^(lam1.size()+lam2.size())
+  return poly
