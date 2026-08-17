@@ -1,0 +1,14 @@
+def num_rect_parts(lam):
+  return len(set(lam))
+
+
+def R(lam1,lam2):
+  mu = []
+  for j in lam1:
+    if j<len(lam2):
+      mu.append(lam2[j])
+  return 1 + num_rect_parts(lam)
+
+
+def f(k,r,s):
+  
