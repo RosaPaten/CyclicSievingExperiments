@@ -1,15 +1,43 @@
-R.<t> = PolynomialRing(ZZ)
+R.<q,t> = PolynomialRing(ZZ)
+def p(x):
+    poly =0
+    for i in range(x):
+        poly = poly + q^i
+    return poly
+"""
 def num_rect_parts(lam):
   return len(set(lam))
 
 
 def R(lam1,lam2):
+  print(lam1,lam2)
   mu = []
   for j in lam1:
     if j<len(lam2):
       mu.append(lam2[j])
   return 1 + num_rect_parts(mu)
+"""
 
+def R(k,r,s,lam1,lam2):
+  lam1 = list(lam1)
+  lam2 = list(lam2)
+  while len(lam1)<k:
+    lam1.append(0)
+  while len(lam2)<r:
+    lam2.append(0)
+  lam1 = lam1[::-1]
+  lam2 = lam2[::-1]
+  lam1.append(r)
+  lam2.append(s)
+  #print(lam1,lam2)
+  tot = 0
+  for i in range(k):
+    if lam1[i+1] - lam1[i]>1:
+      tot = tot + 1
+    elif lam1[i+1]-lam1[i] == 1:
+      if lam2[lam1[i]] != lam2[lam1[i]+1]:
+        tot = tot +1
+  return tot
 
 def f(k,r,s):
   S = PartitionsInBox(k-1,r)
@@ -17,5 +45,57 @@ def f(k,r,s):
   poly = 0
   for lam1 in S:
     for lam2 in T:
-      poly = poly + R(lam1,lam2) + t^(lam1.size()+lam2.size())
+      poly = poly + R(k,r,s,lam1,lam2)*t^(lam1.size()+lam2.size())
+  #if poly == 0:
+    #return 1
   return poly
+
+#number of connected components in the decreasing forest 
+def r(P):
+    roots = P.decreasing_roots()
+    return len(list(roots))
+
+def s(P):
+    b = P.upper_dyck_word()
+    return b.number_of_touch_points()
+
+#dinv of the upper dyck path
+def dinv(P):
+  return t^(P.upper_dyck_word()).dinv()
+
+#distance
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+def g(n,k_1,k_2):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    #print(s(P))
+    if r(P) == k_1 and s(P) == k_2:
+      poly = poly + dinv(P)*d(P)
+  return poly
+
+def tester_new(n,k):
+    poly = 0
+    for i in range(1,n-k+1):
+        poly = poly + g(n-k,n-k-2,i)*q_binomial(i+k-1,i,q=t)+ q_binomial(k,1,q=t)*g(n-k,n-k-1,i)*q_binomial(i+k-2,i-1,q=t) + t*q_binomial(k,2,q=t)*g(n-k,n-k,i)*q_binomial(i+k-3,i-2,q=t)
+        extra = 0
+        for j in range(0,n-k-i+1):
+            print(f(k,i,j))
+            extra = extra + f(k,i,j)*g(n-k-i,n-k-i,j)
+        extra = q^(n-k-i)*t^(binomial(i,2))*extra
+        poly = poly + extra
+    return q^(n-k-2)*t^(binomial(k,2))*poly
+
+print(g(6,4,4) - tester_new(6,4))
+#print(f(4,4,0))
+#print(g(3,3,0))
+"""
+tot = 0
+n = 5
+for i in range(1,n+1):
+    for j in range(1,n+1):
+        tot = tot + g(n,i,j)
+print(tot.is_symmetric())  
+"""
