@@ -1,0 +1,118 @@
+R.<q,t> = PolynomialRing(ZZ)
+def p(x):
+    poly =0
+    for i in range(x):
+        poly = poly + q^i
+    return poly
+"""
+def num_rect_parts(lam):
+  return len(set(lam))
+
+
+def R(lam1,lam2):
+  print(lam1,lam2)
+  mu = []
+  for j in lam1:
+    if j<len(lam2):
+      mu.append(lam2[j])
+  return 1 + num_rect_parts(mu)
+"""
+
+def R(k,r,s,lam1,lam2):
+  lam1 = list(lam1)
+  lam2 = list(lam2)
+  while len(lam1)<k:
+    lam1.append(0)
+  while len(lam2)<r:
+    lam2.append(0)
+  lam1 = lam1[::-1]
+  lam2 = lam2[::-1]
+  lam1.append(r)
+  lam2.append(s)
+  #print(lam1,lam2)
+  tot = 0
+  for i in range(k):
+    if lam1[i+1] - lam1[i]>1:
+      tot = tot + 1
+    elif lam1[i+1]-lam1[i] == 1:
+      if lam2[lam1[i]] != lam2[lam1[i]+1]:
+        tot = tot +1
+  return tot
+
+def f(k,r,s):
+  S = PartitionsInBox(k-1,r)
+  T = PartitionsInBox(r-1,s)
+  poly = 0
+  for lam1 in S:
+    for lam2 in T:
+      poly = poly + R(k,r,s,lam1,lam2)*t^(lam1.size()+lam2.size())
+  #if poly == 0:
+    #return 1
+  return poly
+"""
+def R(a,b,c,d,lam1,lam2):
+  lam1 = list(lam1)
+  lam2 = list(lam2)
+  while len(lam1)<a:
+    lam1.append(0)
+  while len(lam2)<c:
+    lam2.append(0)
+  lam1 = lam1[::-1]
+  lam2 = lam2[::-1]
+  lam1.append(b)
+  lam2.append(d)
+  #print(lam1,lam2)
+  tot = 0
+  for i in range(a):
+    if lam1[i+1] - lam1[i]>1:
+      tot = tot + 1
+    elif lam1[i+1]-lam1[i] == 1:
+      if lam2[lam1[i]] != lam2[lam1[i]+1]:
+        tot = tot +1
+  return tot
+"""
+
+"""
+def f(a,b,c,d):
+
+
+  S = PartitionsInBox(a-1,b)
+  T = PartitionsInBox(c-1,d)
+  poly = 0
+  for lam1 in S:
+    for lam2 in T:
+      poly = poly + R(a,b,c,d,lam1,lam2)*t^(lam1.size()+lam2.size())
+  #if poly == 0:
+    #return 1
+  return poly
+"""  
+
+
+def guess(k,r,s):
+    return f(k,r,s)/(q_binomial(k+r-2,r-1,q=t)*q_binomial(r+s-3,s-2,q=t))
+
+def tester(k,r,s):
+    tot = t^r*f(k-1,r,s)
+    tot = tot + t^(s+r-1)*f(k-1,r-1,s)
+    for i in range(0,r-1):
+        tot = tot + t^(i+s*(r-i))*f(k-1,i,s) + t^(i+s*(r-i))*q_binomial(i+k-2,i,q=t)*q_binomial(i+s-1,s,q=t)
+    for i in range(0,r):
+        for j in range(0,s):
+            tot = tot + t^(i+j*(r-i))*f(k-1,i,j)*q_binomial(r+s-i-j-1,s-j,q=t) + t^(i+j*(r-i))*q_binomial(i+k-2,i,q=t)*q_binomial(i+j-1,j,q=t)*q_binomial(r+s-i-j-1,s-j,q=t)
+    return tot
+"""
+def tester(a,b,c,d):
+    tot = t^b*f(a-1,b,c,d)
+    #tot = tot + t^(b-1+d)*f(a-1,b-1,c-1,d)
+    #tot = tot + t^(b+d-1)*f(a-1,b-2,c-1,d)
+    for i in range(0,b):
+        for j in range(0,d+1):
+            tot = tot + t^(i+j)*f(a-1,i,c-1,j) + t^(i+j)*q_binomial(i+a-2,i,q=t)*q_binomial(c+j-2,j,q=t)
+    return tot
+
+print(tester(5,4,4,4))
+print(f(5,4,4,4))
+"""
+
+print(tester(5,4,4))
+print(f(5,4,4))
