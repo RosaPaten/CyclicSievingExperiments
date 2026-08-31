@@ -1,0 +1,74 @@
+R.<q,t> = PolynomialRing(ZZ)
+
+"""
+the cleanest and simplest version of my code to compute TriCat - Rosa
+"""
+
+#number of contacts in lower path
+def r_lower(P):
+    a = P.lower_dyck_word()
+    return a.number_of_touch_points()
+
+#number of contacts in upper path
+def r_upper(P):
+    b = P.upper_dyck_word()
+    return b.number_of_touch_points()
+
+#dinv of the upper dyck path
+def dinv(P):
+  return t^(P.upper_dyck_word()).dinv()
+
+#distance
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+#TriCat_{n, k_a}
+def TriCat(n,k):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r_lower(P) == k:
+      poly = poly + dinv(P)*d(P)
+  return poly
+
+#TriCat_{n, k_a, k_b}. the underscore 'cat' is for catalytic :)
+def TriCat_cat(n,k_1,k_2):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r_lower(P) == k_1 and r_upper(P) == k_2:
+      poly = poly + dinv(P)*d(P)
+  return poly
+
+"""
+def conj(n,k):
+    tot = q_binomial(2*n-k-3,n-k-2)*q_binomial(k+1,2)*q^(n-k)
+    tot = tot + q_binomial(k,1)*q_binomial(2*n-k-3,n-k-2)
+    tot = tot + q_binomial(k,1)*q_binomial(2*n-k-4,n-k-2)*q^(n-k-1)
+    tot = tot + (q_binomial(k,1)*q_binomial(2*n-k-3,n-k-3)*q^2*q_binomial(n,1))/(1+q)
+    tot = tot*q^(n*(k-1)+2)
+    return tot
+
+def conj2(n,k):
+    tot = (1+q)*q_binomial(2*n-k-4,n-k-2)*q^(n-k-1)
+    tot = tot + q_binomial(n+1,1)*q_binomial(2*n-k-3,n-k-2)
+    tot = tot*(q_binomial(k,1)/q_binomial(2,1))
+    return tot*q^(n*(k-1)+2)
+"""
+#*q_binomial(n+1,1)*q_binomial(n+2,1)
+
+def conj(n,k):
+    tot = 0
+    tot = tot + q_binomial(2*n-k-5,n-k-4)*q_binomial(n+3,4)/q_binomial(n,1)
+    tot = tot + q^(n-k-3)*q_binomial(2*n-k-6,n-k-4)*q_binomial(n+1,1)*q_binomial(n+2,1)/(1+q)
+    tot = tot + q^(2*n-2*k-6)*(q_binomial(2*n-k-7,n-k-4))*q_binomial(n+1,1)
+    tot = tot + q^(3*n-3*k-9)*(q_binomial(2*n-k-8,n-k-4))*q_binomial(4,1)*q_binomial(3,1)*q_binomial(2,1)
+    return (q_binomial(k,1)*tot*q^(n*(k-1)+4))
+    #*(q_binomial(k,1)/q_binomial(3,1))
+
+def F(n,k):
+    return q^(binomial(n,2))*TriCat_cat(n,n-4,k)(q^(-1),q)
+
+for n in range(5,9):
+    for k in range(1,n-3):
+        print(F(n,k) - conj(n,k))
