@@ -9,16 +9,23 @@ def all_seq(j,n,m):
   temp = []
   for d in range(0, j):
     temp = temp + strict_increasing_sequences(j, d)
+  print(temp)
   for seq in temp:
-    new = (n,m) + seq[::-1] + (0,)
-    all.appeend(new)
-  return new
-    
-    
-    
+    new = (n,m,j) + seq[::-1] + (0,0) 
+    all.append(new)
+  return all
+
+def P(s):
+    r = len(s)
+    prod = 1
+    for j in range(2,r):
+        prod = prod*q_binomial(s[i-2] + s[i-1] - s[i] - s[i+1] - 1, s[i-1] - s[i] - 1)*q^(s[i+1]*(s[i-1] - s[i])
+    return prod
+
             
 def F(n,m,j):
   all = all_seq(j,n,m)
+  
 
 def conjecture(m,n,k):
   poly = 0
