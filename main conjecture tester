@@ -1,0 +1,33 @@
+R.<q> = PolynomialRing(ZZ)
+
+def strict_increasing_sequences(n, d):
+    return [tuple(s) for s in UnorderedTuples(range(n), d) 
+            if all(s[i] < s[i+1] for i in range(len(s) - 1))]
+
+def all_seq(j,n,m):
+  all = []
+  temp = []
+  for d in range(0, j):
+    temp = temp + strict_increasing_sequences(j, d)
+  for seq in temp:
+    new = (n,m) + seq[::-1] + (0,)
+    all.appeend(new)
+  return new
+    
+    
+    
+            
+def F(n,m,j):
+  all = all_seq(j,n,m)
+
+def conjecture(m,n,k):
+  poly = 0
+  for j in range(0,m):
+    poly = poly + q^(j*(n-k-m+1))*q_binomial(2n - k - m - j, n - k - m)*F(n,m,j)
+  poly = poly*q_binomial(k,1)*q^(n*(k-1)+m)
+  return poly
+
+  
+
+  
+  
