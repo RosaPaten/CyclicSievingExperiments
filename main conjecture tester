@@ -1,4 +1,4 @@
-R.<q> = PolynomialRing(ZZ)
+R.<q,t> = PolynomialRing(ZZ)
 
 def strict_increasing_sequences(n, d):
     return [tuple(s) for s in UnorderedTuples(range(n), d) 
@@ -7,9 +7,11 @@ def strict_increasing_sequences(n, d):
 def all_seq(j,n,m):
   all = []
   temp = []
+  if j == 0:
+    return [(n,m,0,0)]
   for d in range(0, j):
     temp = temp + strict_increasing_sequences(j, d)
-  print(temp)
+  #print(temp)
   for seq in temp:
     new = (n,m,j) + seq[::-1] + (0,0) 
     all.append(new)
@@ -18,21 +20,32 @@ def all_seq(j,n,m):
 def P(s):
     r = len(s)
     prod = 1
-    for j in range(2,r):
-        prod = prod*q_binomial(s[i-2] + s[i-1] - s[i] - s[i+1] - 1, s[i-1] - s[i] - 1)*q^(s[i+1]*(s[i-1] - s[i])
+    for i in range(2,r-1):
+        prod = prod*q_binomial(s[i-2] + s[i-1] - s[i] - s[i+1] - 1, s[i-1] - s[i] - 1)*q^(s[i+1]*(s[i-1] - s[i]))
+    #print(prod)
     return prod
 
             
 def F(n,m,j):
   all = all_seq(j,n,m)
+  #print(all)
+  tot = 0
+  for s in all:
+    tot = tot + P(s)
+  return tot
   
 
 def conjecture(m,n,k):
   poly = 0
   for j in range(0,m):
-    poly = poly + q^(j*(n-k-m+1))*q_binomial(2n - k - m - j, n - k - m)*F(n,m,j)
+    poly = poly + q^(j*(n-k-m+1))*q_binomial(2*n - k - m - j, n - k - m)*F(n,m,j)
   poly = poly*q_binomial(k,1)*q^(n*(k-1)+m)
   return poly
+
+n = 5                                                                                          
+conjecture(1,n,2)
+
+#print(all_seq(0,5,4))
 
   
 
